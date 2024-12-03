@@ -7,6 +7,6 @@ This project is built with:
 |------------------|--------------------|
 |Framework         |FastAPI, Jinja2     |
 |Database          |PostSQL, Alembic    |
-|Containorization  |Docker              |
+|Containerization  |Docker              |
 |Data Validation   |Pydantic            |
 |Code Quality      |isort, black, flake8|
