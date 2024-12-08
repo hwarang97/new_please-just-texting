@@ -42,6 +42,24 @@ This project is built with:
    - Output
       - A conformation message in Slack
       - "The event [Meeting name] has been updated"
-4. Delete Events
-5. Google Account Authentication
-6. Error handling
+3. Delete Events
+   - Input Example
+      - /app text...
+   - Process
+      - Identify the event to be removed in Google Calendar.
+      - Remove the event based on the text input.
+   - Output
+      - A conformation message in Slack
+      - "The event [Meeting name] has been deleted"
+4. Google Account Authentication
+   - Process
+      - Use Google OAuth2 to autenticate users and link their Google Calendar account.
+      - Store the OAuth2 token for API request.
+   - Output
+      - Provide a link in Slack for the user to authenticate with Google account.
+      - "Please authenticate your Google Calendar account by clicking [link]"
+5. Error handling
+   - Invalid input
+      - Example1: Input text doesn't have sufficient details.
+   - Output
+      - "Need more infomation for action"
