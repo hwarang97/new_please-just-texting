@@ -26,14 +26,22 @@ This project is built with:
 ## Requirements
 1. Create Events
    - Input Example
-     - /app <text>
+     - /app text...
    - Process
      - Use OpenAI API to extract event details (date, time, title, location) from the text.
      - Add the extracted event to Google Calendar useing the Googld Calendar API.
    - Output
      - A confirmation message in Slack
      - "The event [Meeting name] has been created for [date] in the [location]"
-3. Update Events
+2. Update Events
+   - Input Example
+      - /app text...
+   - Process
+      - Identify the event to be updated in Google Calendar.
+      - Update the date, time, or other details based on the text input.
+   - Output
+      - A conformation message in Slack
+      - "The event [Meeting name] has been updated"
 4. Delete Events
 5. Google Account Authentication
 6. Error handling
