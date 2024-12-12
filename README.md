@@ -15,7 +15,7 @@ TBD
 
 ## Tech Stack
 This project is built with:
-|Category              |Technologies        |
+|Category              |Technologies           |
 | :------------------- | :-------------------- |
 |**Framework**         |FastAPI, Jinja2        |
 |**Database**          |PostgreSQL, Alembic    |
@@ -58,7 +58,16 @@ This project is built with:
    - Output
       - Provide a link in Slack for the user to authenticate with Google account.
       - "Please authenticate your Google Calendar account by clicking [link]"
-5. Error handling
+5. Database
+   |Column                |Data Type    |Description           |
+   | :------------------- | :---------- | :------------------- |
+   |**ID**                |SERIAL       |unique identifier     |                
+   |**Email**             |VARCHAR(255) |login id              |                
+   |**hased password**    |VARCHAR(255) |hashed password       |
+   |**name**              |VARCHAR(20)  |user name             |
+   |**access token**      |TEXT         |Google API token      |
+   |**refresh token**     |TEXT         |refresh access token  |
+6. Error handling
    - Invalid input
       - Example1: Input text doesn't have sufficient details.
    - Output
