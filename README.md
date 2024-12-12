@@ -1,6 +1,6 @@
 # Please Just Texting!
 [image]   
-A Slack plugin that simplifies Google Calendar mangement through text commands. No need to visit the Gogle Calnedar site. Just type your meeting details in Slack, and the plugin will automaticallyt manage your calendar.
+A Slack plugin that simplifies Google Calendar mangement through text commands. No need to visit the Google Calnedar site. Just type your meeting details in Slack, and the plugin will automaticallyt manage your calendar.
 
 ## Architecture
 [image]   
