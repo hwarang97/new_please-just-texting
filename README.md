@@ -16,12 +16,12 @@ TBD
 ## Tech Stack
 This project is built with:
 |Category              |Technologies        |
-| :------------------- | :----------------- |
-|**Framework**         |FastAPI, Jinja2     |
-|**Database**          |PostSQL, Alembic    |
-|**Containerization**  |Docker              |
-|**Data Validation**   |Pydantic            |
-|**Code Quality**      |isort, black, flake8|
+| :------------------- | :-------------------- |
+|**Framework**         |FastAPI, Jinja2        |
+|**Database**          |PostgreSQL, Alembic    |
+|**Containerization**  |Docker                 |
+|**Data Validation**   |Pydantic               |
+|**Code Quality**      |isort, black, flake8   |
 
 ## Requirements
 1. Create Events
