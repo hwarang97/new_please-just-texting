@@ -37,4 +37,10 @@ async def slack_events(request: Request):
     if data.get("type") == "url_verification":
         return {"challenge": data.get("challenge")}
 
+    if data.get("type") == "event_callback":
+        event = data.get("event")
+        print("message: ", event.get("text"))
+
+        return {"status": "ok"}
+
     return {"status": "ignored"}
