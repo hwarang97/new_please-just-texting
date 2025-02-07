@@ -1,10 +1,17 @@
 from typing import Union
+import os
 
 from fastapi import FastAPI
 from fastapi import Request
 from pydantic import BaseModel
+from openai import OpenAI
+from dotenv import load_dotenv
 
+
+load_dotenv()
 app = FastAPI()
+
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 class Item(BaseModel):
     name: str
@@ -39,7 +46,25 @@ async def slack_events(request: Request):
 
     if data.get("type") == "event_callback":
         event = data.get("event")
-        print("message: ", event.get("text"))
+
+        completion = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "assistant",
+                 "content": """
+                 You are an assistant responsible for extracting schedule information from the user's text.
+                 Your role is to identify and extract the event title, date, time, and location from the given text.
+                 Return the extracted information in the following JSON format:
+                 {"event": "[event_title]", "date": "[date]", "time": "[time]", "location": "[location]"}
+                 """},
+                {
+                    "role": "user",
+                    "content": event.get("text")
+                },
+            ]
+        )
+
+        print(completion.choices[0].message.content)
 
         return {"status": "ok"}
 
