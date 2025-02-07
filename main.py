@@ -6,11 +6,14 @@ from openai import OpenAI
 from dotenv import load_dotenv
 
 from prompt import PROMPT
+from gpt_service import extract_schedule_info
+
 
 load_dotenv()
 app = FastAPI()
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
 
 @app.post("/slack/events")
 async def slack_events(request: Request):
@@ -21,20 +24,7 @@ async def slack_events(request: Request):
 
     if data.get("type") == "event_callback":
         event = data.get("event")
-
-        completion = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-                {"role": "assistant",
-                 "content": PROMPT},
-                {
-                    "role": "user",
-                    "content": event.get("text")
-                },
-            ]
-        )
-
-        print(completion.choices[0].message.content)
+        print(extract_schedule_info(client, event.get("text"), PROMPT))
 
         return {"status": "ok"}
 
