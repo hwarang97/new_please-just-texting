@@ -1,34 +1,19 @@
-from typing import Union
+import os
 
 from fastapi import FastAPI
 from fastapi import Request
-from pydantic import BaseModel
+from openai import OpenAI
+from dotenv import load_dotenv
 
+from prompt import PROMPT
+from gpt_service import extract_schedule_info
+
+
+load_dotenv()
 app = FastAPI()
 
-class Item(BaseModel):
-    name: str
-    price: float
-    is_offer: Union[bool, None] = None
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-class User(BaseModel):
-    name: str
-    email: str
-
-
-@app.get("/")
-async def read_root():
-    return {"Hello": "World"}
-
-
-@app.get("/items/{item_id}")
-async def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
-
-
-@app.put("/items/{item_id}")
-def update_item(item_id: int, item: Item, user: User):
-    return {"item_name": item.name, "item_price": item.price, "item_id": item_id, "user_name": user.name}
 
 @app.post("/slack/events")
 async def slack_events(request: Request):
@@ -39,7 +24,7 @@ async def slack_events(request: Request):
 
     if data.get("type") == "event_callback":
         event = data.get("event")
-        print("message: ", event.get("text"))
+        print(extract_schedule_info(client, event.get("text"), PROMPT))
 
         return {"status": "ok"}
 
