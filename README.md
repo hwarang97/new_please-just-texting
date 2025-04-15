@@ -2,6 +2,15 @@
 [image]   
 A Slack plugin that simplifies Google Calendar mangement through text commands. No need to visit the Google Calnedar site. Just type your meeting details in Slack, and the plugin will automaticallyt manage your calendar.
 
+## Installation
+- Register the highlighted url in slack request_url   
+
+![image](https://github.com/user-attachments/assets/05585bd5-e989-49af-af4d-e3ae11d2a4fb)
+![image](https://github.com/user-attachments/assets/295b7bac-0f0f-455e-88ae-4a57e84d9465)
+
+
+
+
 ## Architecture
 ![alt text](https://github.com/hwarang97/new_please-just-texting/blob/main/architecture.jpg?raw=true)
 
