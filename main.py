@@ -1,6 +1,8 @@
 import uvicorn
-from fastapi import FastAPI, Request
+from fastapi import BackgroundTasks, FastAPI, Request
 from pyngrok import ngrok
+
+from tasks.event_handler import handle_event_creation
 
 app = FastAPI()
 
@@ -11,12 +13,12 @@ async def read_root():
 
 
 @app.post("/slack/events")
-async def slack_events(request: Request):
+async def slack_events(request: Request, background_task: BackgroundTasks):
     data = await request.json()
     event_type = data.get("type")
 
     if event_type == "event_callback":
-        print(data)
+        background_task.add_task(handle_event_creation, data)
         return {"status": "ok"}
 
     if event_type == "url_verification":
