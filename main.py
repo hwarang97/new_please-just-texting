@@ -29,4 +29,4 @@ if __name__ == "__main__":
     port = 8000
     http_tunnel = ngrok.connect(addr=f"{port}", bind_tls=True)
     print(f"ngrok url: {http_tunnel}")
-    uvicorn.run("main:app", port=port)
+    uvicorn.run("main:app", port=port, reload=True)
