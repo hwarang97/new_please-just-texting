@@ -1,14 +1,13 @@
 import os
+from urllib.parse import urlencode
 
 import uvicorn
-from urllib.parse import urlparse, urlencode, urljoin
+from dotenv import load_dotenv
 from fastapi import BackgroundTasks, FastAPI, Request
 from fastapi.responses import RedirectResponse
 from pyngrok import ngrok
-from dotenv import load_dotenv
 
 from tasks.event_handler import handle_event_creation
-
 
 load_dotenv()
 GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
@@ -36,6 +35,7 @@ async def slack_events(request: Request, background_task: BackgroundTasks):
     if event_type == "url_verification":
         return {"challenge": data["challenge"]}
 
+
 @app.get("/auth/login")
 async def auth_login():
     params = {
@@ -44,10 +44,11 @@ async def auth_login():
         "response_type": "code",
         "scope": GOOGLE_SCOPES,
         "access_type": "offline",
-        "prompt": "consent"
+        "prompt": "consent",
     }
     auth_url = "https://accounts.google.com/o/oauth2/v2/auth?" + urlencode(params)
     return RedirectResponse(url=auth_url)
+
 
 @app.get("/auth/callback")
 async def auth_callback():
