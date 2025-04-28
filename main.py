@@ -1,15 +1,15 @@
 import os
+from pathlib import Path
 from urllib.parse import urlencode
 
-import uvicorn
 import requests
+import uvicorn
 from dotenv import load_dotenv
 from fastapi import BackgroundTasks, FastAPI, Request
 from fastapi.responses import RedirectResponse
 from pyngrok import ngrok
-from pathlib import Path
 
-from tasks.event_handler import handle_event_creation
+from tasks.event_handler import handle_event
 
 load_dotenv()
 GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
@@ -33,7 +33,7 @@ async def slack_events(request: Request, background_task: BackgroundTasks):
     event_type = data.get("type")
 
     if event_type == "event_callback":
-        background_task.add_task(handle_event_creation, data)
+        background_task.add_task(handle_event, data)
         return {"status": "ok"}
 
     if event_type == "url_verification":
