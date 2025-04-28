@@ -1,3 +1,4 @@
+import json
 import os
 from pathlib import Path
 from urllib.parse import urlencode
@@ -16,8 +17,7 @@ GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
 GOOGLE_CLIENT_PASS = os.getenv("GOOGLE_CLIENT_PASS")
 GOOGLE_REDIRECT_URI = os.getenv("GOOGLE_REDIRECT_URI")
 GOOGLE_SCOPES = os.getenv("SCOPES")
-ACCESS_TOKEN_PATH = Path(__file__).resolve().parent / "access_token.json"
-REFRESH_TOKEN_PATH = Path(__file__).resolve().parent / "refresh_token.json"
+TOKEN_PATH = Path(__file__).resolve().parent / "token.json"
 
 app = FastAPI()
 
@@ -74,11 +74,8 @@ async def auth_callback(code: str = "", error: str = ""):
     ).json()
 
     # store token
-    with open(ACCESS_TOKEN_PATH, mode="w") as token:
-        token.write(response["access_token"])
-
-    with open(REFRESH_TOKEN_PATH, mode="w") as token:
-        token.write(response["refresh_token"])
+    with open(TOKEN_PATH, mode="w") as token:
+        json.dump(response, token)
 
 
 if __name__ == "__main__":

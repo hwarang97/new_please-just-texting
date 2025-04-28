@@ -11,5 +11,4 @@ __pycache__
 /venv
 .env
 credentials.json
-access_token.json
-refresh_token.json
+token.json
