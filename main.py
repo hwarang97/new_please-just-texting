@@ -2,10 +2,12 @@ import os
 from urllib.parse import urlencode
 
 import uvicorn
+import requests
 from dotenv import load_dotenv
 from fastapi import BackgroundTasks, FastAPI, Request
 from fastapi.responses import RedirectResponse
 from pyngrok import ngrok
+from pathlib import Path
 
 from tasks.event_handler import handle_event_creation
 
@@ -14,6 +16,8 @@ GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
 GOOGLE_CLIENT_PASS = os.getenv("GOOGLE_CLIENT_PASS")
 GOOGLE_REDIRECT_URI = os.getenv("GOOGLE_REDIRECT_URI")
 GOOGLE_SCOPES = os.getenv("SCOPES")
+ACCESS_TOKEN_PATH = Path(__file__).resolve().parent / "access_token.json"
+REFRESH_TOKEN_PATH = Path(__file__).resolve().parent / "refresh_token.json"
 
 app = FastAPI()
 
@@ -51,8 +55,30 @@ async def auth_login():
 
 
 @app.get("/auth/callback")
-async def auth_callback():
-    pass
+async def auth_callback(code: str = "", error: str = ""):
+    # Authorization Refuse
+    if error:
+        return {"error": error}
+
+    # Request token
+    params = {
+        "code": code,
+        "client_id": GOOGLE_CLIENT_ID,
+        "client_secret": GOOGLE_CLIENT_PASS,
+        "redirect_uri": GOOGLE_REDIRECT_URI,
+        "grant_type": "authorization_code",
+    }
+    # TODO: 네트워크 결과를 기다리는 과정인데 왜 await를 사용할 수 없는 거지?
+    response = requests.post(
+        url="https://oauth2.googleapis.com/token", data=params
+    ).json()
+
+    # store token
+    with open(ACCESS_TOKEN_PATH, mode="w") as token:
+        token.write(response["access_token"])
+
+    with open(REFRESH_TOKEN_PATH, mode="w") as token:
+        token.write(response["refresh_token"])
 
 
 if __name__ == "__main__":
