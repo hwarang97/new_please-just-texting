@@ -1,65 +1,35 @@
+import json
 import os
 from pathlib import Path
-from datetime import datetime
-from datetime import timedelta
 
-from google.oauth2.credentials import Credentials
-from google.auth.transport.requests import Request
-from google_auth_oauthlib.flow import InstalledAppFlow
-from googleapiclient.discovery import build
+import requests
+from dotenv import load_dotenv
 
-SCOPES = ["https://www.googleapis.com/auth/calendar.events.owned"]
-BASE_DIR = Path(__file__).resolve().parents[1]
-TOKEN_PATH = BASE_DIR / "token.json"
-CREDENTIALS_PATH = BASE_DIR / "credentials.json"
+load_dotenv()
 
-creds = None
+SCOPES = os.getenv("SCOPES")
+TOKEN_PATH = Path(__file__).resolve().parents[1] / "token.json"
 
-# Load token from local
-if os.path.exists(TOKEN_PATH):
-    creds = Credentials.from_authorized_user_file(str(TOKEN_PATH), SCOPES)
 
-# No Token or Invalid
-if not creds or not creds.valid:
-
-    # Token are expired
-    if creds and creds.expired and creds.refresh_token:
-        creds.refresh(Request())
-
-    # No Refresh token
-    else:
-        # Proceed authorization with credentials.json
-        flow = InstalledAppFlow.from_client_secrets_file(
-            str(CREDENTIALS_PATH), SCOPES
-        )
-        flow.redirect_uri = "http://localhost:8000/auth/callback"
-        creds = flow.run_local_server(port=8000)
-
-    # Rewrite token
-    with open(str(TOKEN_PATH), "w") as token:
-        token.write(creds.to_json())
-
-# Initiate client
-service = build("calendar", "v3", credentials=creds)
-
-event = {
-    "summary": "GPT 미팅 테스트",
-    "location": "서울 마포구",
-    "description": "구글 캘린더 API 테스트 미팅",
-    "start": {
-        "dateTime": (datetime.now() + timedelta(hours=1)).isoformat() + 'Z',
-        "timezone": "Asia/Seoul",
-    },
-    "end": {
-        "dateTime": (datetime.now() + timedelta(hours=2)).isoformat() + 'Z',
-        "timezone": "Asia/Seoul",
-    },
-    "reminder": {
-        "useDefault": True
+def create_event(schedule_info: dict):
+    url = "https://www.googleapis.com/calendar/v3/calendars/primary/events"
+    with open(TOKEN_PATH, mode="r") as f:
+        token = json.load(f)
+        headers = {
+            "Authorization": f"Bearer {token['access_token']}",
+            "Content-Type": "application/json",
+        }
+    data = {
+        "location": f"{schedule_info.get("location")}",
+        "summary": "test",
+        "end": {
+            "dateTime": "2025-04-29T18:00:00+09:00",
+            "timeZone": "Asia/Seoul",
+        },
+        "start": {
+            "dateTime": "2025-04-29T17:00:00+09:00",
+            "timeZone": "Asia/Seoul",
+        },
     }
-}
-
-event_result = service.events().insert(calendarId="primary", body=event).execute()
-print(event.get('htmlLink'))
-
-
+    response = requests.post(url=url, json=data, headers=headers)
+    response.raise_for_status()
