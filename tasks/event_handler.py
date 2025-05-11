@@ -1,6 +1,6 @@
 import json
 
-from services.create_event import create_event
+from services.event_crud import create_event
 from services.schedule_parser import parse_schedule_from_message
 
 
