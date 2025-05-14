@@ -1,24 +1,9 @@
-import json
 import os
 from pathlib import Path
 
 import requests
-from dotenv import load_dotenv
 
-load_dotenv()
-
-SCOPES = os.getenv("SCOPES")
-TOKEN_PATH = Path(__file__).resolve().parents[1] / "token.json"
-
-
-def get_header() -> dict[str, str]:
-    with open(TOKEN_PATH, mode="r") as f:
-        token = json.load(f)
-        headers = {
-            "Authorization": f"Bearer {token['access_token']}",
-            "Content-Type": "application/json",
-        }
-    return headers
+from utils.auth_helper import get_header
 
 
 def create_event(schedule_info: dict):
@@ -38,17 +23,6 @@ def create_event(schedule_info: dict):
     }
     response = requests.post(url=url, json=data, headers=headers)
     response.raise_for_status()
-
-
-def delete_event():
-    eventId = "1234"
-    url = f"https://www.googleapis.com/calendar/v3/calendars/primary/events/{eventId}"
-    with open(TOKEN_PATH, mode="r") as f:
-        token = json.load(f)
-        headers = {
-            "Authorization": f"Bearer {token['access_token']}",
-            "Content-Type": "application/json",
-        }
 
 
 def get_event(schedule_info: dict) -> dict:
