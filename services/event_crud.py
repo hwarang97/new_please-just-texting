@@ -5,10 +5,9 @@ import requests
 
 from utils.auth_helper import get_header
 
-
 def create_event(schedule_info: dict):
     url = "https://www.googleapis.com/calendar/v3/calendars/primary/events"
-    headers = get_header()
+    headers = get_header("google")
     data = {
         "location": f"{schedule_info.get("location")}",
         "summary": "test",
@@ -27,7 +26,7 @@ def create_event(schedule_info: dict):
 
 def get_event(schedule_info: dict) -> dict:
     url = "https://www.googleapis.com/calendar/v3/calendars/primary/events"
-    headers = get_header()
+    headers = get_header("google")
     params = {
         "timeMax": "2025-04-29T23:00:00+09:00",
         "timeMin": "2025-04-29T15:00:00+09:00",
