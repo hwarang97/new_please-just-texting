@@ -30,7 +30,20 @@ class GoogleHeader(HeaderStrategy):
         return headers
 
 
-_HEADER_STRATEGIES: dict[str, HeaderStrategy] = {"google": GoogleHeader()}
+class SlackHeader(HeaderStrategy):
+    def get_header(self):
+        token = os.getenv("SLACK_BOT_TOKEN")
+        headers = {
+            "Authorization": f"Bearer {token}",
+            "Content-Type": "application/json",
+        }
+        return headers
+
+
+_HEADER_STRATEGIES: dict[str, HeaderStrategy] = {
+    "google": GoogleHeader(),
+    "slack": SlackHeader(),
+    }
 
 
 def get_header(domain_name: str) -> dict[str, str]:
