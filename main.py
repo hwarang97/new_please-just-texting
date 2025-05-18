@@ -12,8 +12,8 @@ from fastapi.responses import RedirectResponse
 from pydantic import BaseModel
 from pyngrok import ngrok
 
-from tasks.event_handler import handle_event
 from schemas.commands import SlashCommand
+from tasks.event_handler import handle_event
 
 load_dotenv()
 GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
@@ -48,9 +48,7 @@ async def slack_events(request: Request, background_task: BackgroundTasks):
 async def handle_calendar_command(
     request: Annotated[SlashCommand, Form()], background_task: BackgroundTasks
 ):
-
-    data = request.model_dump()
-    background_task.add_task(handle_event, data)
+    background_task.add_task(handle_event, request)
     return {"status": "ok"}
 
 

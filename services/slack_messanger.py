@@ -3,9 +3,8 @@ import requests
 from utils.auth_helper import get_header
 
 url = "https://slack.com/api/chat.postMessage"
-channel = "C08CRFN5B5W"
 
-def send_message(event_list: list, url=url, channel=channel):
+def send_message(event_list: list, channel_id: str, url: str=url):
     headers = get_header("slack")
 
     blocks = []
@@ -24,7 +23,7 @@ def send_message(event_list: list, url=url, channel=channel):
         blocks.append(block)
 
     body = {
-        "channel": channel,
+        "channel": channel_id,
         "blocks": blocks,
     }
 

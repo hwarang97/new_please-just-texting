@@ -4,15 +4,18 @@ from services.event_crud import create_event, get_event
 from services.schedule_parser import parse_schedule_from_message
 import requests
 
+from schemas.commands import SlashCommand
+
+
 from services.slack_messanger import send_message
 
-async def handle_event(event_data: dict):
-    # Message parsing
-    message = event_data.get("event").get("text")
+async def handle_event(request: SlashCommand):
+    data: dict = request.model_dump()
+
+    message = data.get("text")
     # schedule_info = json.loads(parse_schedule_from_message(message))
     schedule_info = {}
 
-    # Event handle
     # action = schedule_info.get("action", None)
     action = "read"
 
@@ -21,7 +24,8 @@ async def handle_event(event_data: dict):
         create_event(schedule_info)
     elif action == "read":
         event_list = get_event(schedule_info).get('items')
-        send_message(event_list)
+        channel_id = data.get("channel_id")
+        send_message(event_list=event_list, channel_id=channel_id)
     elif action == "update":
         pass
     elif action == "remove":
