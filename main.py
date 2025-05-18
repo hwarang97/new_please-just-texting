@@ -31,19 +31,6 @@ async def read_root():
     return {"Hello": "World"}
 
 
-@app.post("/slack/events")
-async def slack_events(request: Request, background_task: BackgroundTasks):
-    data = await request.json()
-    event_type = data.get("type")
-
-    if event_type == "event_callback":
-        background_task.add_task(handle_event, data)
-        return {"status": "ok"}
-
-    if event_type == "url_verification":
-        return {"challenge": data["challenge"]}
-
-
 @app.post("/slack/commands/calendar")
 async def handle_calendar_command(
     request: Annotated[SlashCommand, Form()], background_task: BackgroundTasks
