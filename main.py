@@ -50,6 +50,16 @@ async def slack_events(request: Request, background_task: BackgroundTasks):
         return {"challenge": data["challenge"]}
 
 
+@app.post("/slack/commands/calendar")
+async def handle_calendar_command(
+    request: Annotated[SlashCommand, Form()], background_task: BackgroundTasks
+):
+
+    data = request.model_dump()
+    background_task.add_task(handle_event, data)
+    return {"status": "ok"}
+
+
 @app.get("/auth/login")
 async def auth_login():
     params = {
