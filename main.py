@@ -1,13 +1,15 @@
 import json
 import os
 from pathlib import Path
+from typing import Annotated
 from urllib.parse import urlencode
 
 import requests
 import uvicorn
 from dotenv import load_dotenv
-from fastapi import BackgroundTasks, FastAPI, Request
+from fastapi import BackgroundTasks, FastAPI, Form, Request
 from fastapi.responses import RedirectResponse
+from pydantic import BaseModel
 from pyngrok import ngrok
 
 from tasks.event_handler import handle_event
@@ -18,6 +20,14 @@ GOOGLE_CLIENT_PASS = os.getenv("GOOGLE_CLIENT_PASS")
 GOOGLE_REDIRECT_URI = os.getenv("GOOGLE_REDIRECT_URI")
 GOOGLE_SCOPES = os.getenv("SCOPES")
 TOKEN_PATH = Path(__file__).resolve().parent / "token.json"
+
+
+class SlashCommand(BaseModel):
+    channel_id: str
+    command: str
+    text: str
+    response_url: str
+
 
 app = FastAPI()
 
