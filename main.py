@@ -1,15 +1,18 @@
 import json
 import os
 from pathlib import Path
+from typing import Annotated
 from urllib.parse import urlencode
 
 import requests
 import uvicorn
 from dotenv import load_dotenv
-from fastapi import BackgroundTasks, FastAPI, Request
+from fastapi import BackgroundTasks, FastAPI, Form, Request
 from fastapi.responses import RedirectResponse
+from pydantic import BaseModel
 from pyngrok import ngrok
 
+from schemas.commands import SlashCommand
 from tasks.event_handler import handle_event
 
 load_dotenv()
@@ -19,6 +22,7 @@ GOOGLE_REDIRECT_URI = os.getenv("GOOGLE_REDIRECT_URI")
 GOOGLE_SCOPES = os.getenv("SCOPES")
 TOKEN_PATH = Path(__file__).resolve().parent / "token.json"
 
+
 app = FastAPI()
 
 
@@ -27,17 +31,12 @@ async def read_root():
     return {"Hello": "World"}
 
 
-@app.post("/slack/events")
-async def slack_events(request: Request, background_task: BackgroundTasks):
-    data = await request.json()
-    event_type = data.get("type")
-
-    if event_type == "event_callback":
-        background_task.add_task(handle_event, data)
-        return {"status": "ok"}
-
-    if event_type == "url_verification":
-        return {"challenge": data["challenge"]}
+@app.post("/slack/commands/calendar")
+async def handle_calendar_command(
+    request: Annotated[SlashCommand, Form()], background_task: BackgroundTasks
+):
+    background_task.add_task(handle_event, request)
+    return {"status": "ok"}
 
 
 @app.get("/auth/login")
