@@ -13,6 +13,7 @@ from pydantic import BaseModel
 from pyngrok import ngrok
 
 from tasks.event_handler import handle_event
+from schemas.commands import SlashCommand
 
 load_dotenv()
 GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
@@ -20,13 +21,6 @@ GOOGLE_CLIENT_PASS = os.getenv("GOOGLE_CLIENT_PASS")
 GOOGLE_REDIRECT_URI = os.getenv("GOOGLE_REDIRECT_URI")
 GOOGLE_SCOPES = os.getenv("SCOPES")
 TOKEN_PATH = Path(__file__).resolve().parent / "token.json"
-
-
-class SlashCommand(BaseModel):
-    channel_id: str
-    command: str
-    text: str
-    response_url: str
 
 
 app = FastAPI()
