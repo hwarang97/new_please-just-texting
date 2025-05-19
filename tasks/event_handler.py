@@ -1,13 +1,13 @@
 import json
 
-from services.event_crud import create_event, get_event
-from services.schedule_parser import parse_schedule_from_message
 import requests
 
+from schemas.calendar_resoponse import EventItem
 from schemas.commands import SlashCommand
-
-
+from services.event_crud import create_event, delete_event, get_event
+from services.schedule_parser import parse_schedule_from_message
 from services.slack_messanger import send_message
+
 
 async def handle_event(request: SlashCommand):
     data: dict = request.model_dump()
@@ -23,7 +23,7 @@ async def handle_event(request: SlashCommand):
     if action == "create":
         create_event(schedule_info)
     elif action == "read":
-        event_list = get_event(schedule_info).get('items')
+        event_list: list[EventItem] = get_event(schedule_info).items
         channel_id = data.get("channel_id")
         send_message(event_list=event_list, channel_id=channel_id)
     elif action == "update":
