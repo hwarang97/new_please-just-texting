@@ -39,3 +39,13 @@ def get_event(schedule_info: dict) -> CalendarEventsResponse:
     return calendar_event_response
 
     return response.json()
+
+
+def delete_event(event_id: str):
+    calendarId = "primary"
+    eventId = event_id
+    url = f"https://www.googleapis.com/calendar/v3/calendars/{calendarId}/events/{eventId}"
+    headers = get_header("google")
+    response = requests.delete(url=url, headers=headers)
+    response.raise_for_status()
+

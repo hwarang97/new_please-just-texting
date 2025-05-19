@@ -4,7 +4,7 @@ import requests
 
 from schemas.calendar_resoponse import EventItem
 from schemas.commands import SlashCommand
-from services.event_crud import create_event, get_event
+from services.event_crud import create_event, get_event, delete_event
 from services.schedule_parser import parse_schedule_from_message
 from services.slack_messanger import send_message
 
@@ -29,6 +29,8 @@ async def handle_event(request: SlashCommand):
     elif action == "update":
         pass
     elif action == "remove":
-        pass
+        # event_id = schedule_info.get("event_id")
+        event_id = "bdkuom98scuk6bltvcbjpqf7dg"
+        delete_event(event_id)
 
     # 사용자에게 작업이 완료되었음을 알림
