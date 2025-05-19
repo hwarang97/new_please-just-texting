@@ -13,7 +13,7 @@ def send_message(event_list: list, channel_id: str, url: str = url):
         title = event.summary
         start_time = event.start.dateTime
         end_time = event.end.dateTime
-        line = f"{idx+1} - {title} ({start_time} - {end_time})"
+        line = f"{idx+1} - {title} / event_id: {event.id} / {start_time} - {end_time}"
         block = {
             "type": "section",
             "text": {
