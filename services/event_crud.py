@@ -3,7 +3,9 @@ from pathlib import Path
 
 import requests
 
+from schemas.calendar_resoponse import CalendarEventsResponse
 from utils.auth_helper import get_header
+
 
 def create_event(schedule_info: dict):
     url = "https://www.googleapis.com/calendar/v3/calendars/primary/events"
@@ -24,7 +26,7 @@ def create_event(schedule_info: dict):
     response.raise_for_status()
 
 
-def get_event(schedule_info: dict) -> dict:
+def get_event(schedule_info: dict) -> CalendarEventsResponse:
     url = "https://www.googleapis.com/calendar/v3/calendars/primary/events"
     headers = get_header("google")
     params = {
@@ -33,5 +35,8 @@ def get_event(schedule_info: dict) -> dict:
     }
     response = requests.get(url=url, headers=headers, params=params)
     response.raise_for_status()
+    calendar_event_response = CalendarEventsResponse(**response.json())
+    return calendar_event_response
+
 
     return response.json()
