@@ -4,7 +4,7 @@ import requests
 
 from schemas.calendar_resoponse import EventItem
 from schemas.commands import SlashCommand
-from services.event_crud import create_event, delete_event, get_event
+from services.event_crud import create_event, get_event
 from services.schedule_parser import parse_schedule_from_message
 from services.slack_messanger import send_message
 

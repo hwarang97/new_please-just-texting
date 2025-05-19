@@ -9,9 +9,9 @@ def send_message(event_list: list, channel_id: str, url: str=url):
 
     blocks = []
     for idx, event in enumerate(event_list):
-        title = event.get("summary")
-        start_time = event.get("start").get("dateTime")
-        end_time = event.get("end").get("dateTime")
+        title = event.summary
+        start_time = event.start.dateTime
+        end_time = event.end.dateTime
         line = f"{idx+1} - {title} ({start_time} - {end_time})"
         block = {
             "type": "section",
