@@ -4,7 +4,8 @@ from utils.auth_helper import get_header
 
 url = "https://slack.com/api/chat.postMessage"
 
-def send_message(event_list: list, channel_id: str, url: str=url):
+
+def send_message(event_list: list, channel_id: str, url: str = url):
     headers = get_header("slack")
 
     blocks = []
@@ -15,10 +16,10 @@ def send_message(event_list: list, channel_id: str, url: str=url):
         line = f"{idx+1} - {title} ({start_time} - {end_time})"
         block = {
             "type": "section",
-            "text" : {
+            "text": {
                 "type": "mrkdwn",
                 "text": line,
-            }
+            },
         }
         blocks.append(block)
 

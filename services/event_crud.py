@@ -38,5 +38,4 @@ def get_event(schedule_info: dict) -> CalendarEventsResponse:
     calendar_event_response = CalendarEventsResponse(**response.json())
     return calendar_event_response
 
-
     return response.json()

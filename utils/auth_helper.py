@@ -43,7 +43,7 @@ class SlackHeader(HeaderStrategy):
 _HEADER_STRATEGIES: dict[str, HeaderStrategy] = {
     "google": GoogleHeader(),
     "slack": SlackHeader(),
-    }
+}
 
 
 def get_header(domain_name: str) -> dict[str, str]:
