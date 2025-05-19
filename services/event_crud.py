@@ -48,4 +48,3 @@ def delete_event(event_id: str):
     headers = get_header("google")
     response = requests.delete(url=url, headers=headers)
     response.raise_for_status()
-
