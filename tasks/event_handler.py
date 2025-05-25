@@ -4,7 +4,8 @@ import requests
 
 from schemas.calendar_resoponse import EventItem
 from schemas.commands import SlashCommand
-from services.event_crud import create_event, delete_event, get_event
+from services.event_crud import (create_event, delete_event, get_event,
+                                 update_event)
 from services.schedule_parser import parse_schedule_from_message
 from services.slack_messanger import send_message
 
@@ -17,7 +18,7 @@ async def handle_event(request: SlashCommand):
     schedule_info = {}
 
     # action = schedule_info.get("action", None)
-    action = "read"
+    action = "update"
 
     # schedule_info 에서 CRUD 중 하나를 선택
     if action == "create":
@@ -27,7 +28,9 @@ async def handle_event(request: SlashCommand):
         channel_id = data.get("channel_id")
         send_message(event_list=event_list, channel_id=channel_id)
     elif action == "update":
-        pass
+        # event_id = schedule_info.get("event_id")
+        event_id = "61aemuv41mroifv9cgo3vs60gr"
+        update_event(event_id)
     elif action == "remove":
         # event_id = schedule_info.get("event_id")
         event_id = "bdkuom98scuk6bltvcbjpqf7dg"
