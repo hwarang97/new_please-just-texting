@@ -4,7 +4,7 @@
 # Instructions
 - 메세지로부터 먼저 action을 선택하고, action별로 지정된 정보를 추출해.
 - action은 create, read, update, remove 중 하나야.
-- 모든 날짜,시간은 {{ format }} 포맷을 따라야 해.
+- 모든 날짜,시간은 RFC3339 포맷을 따라야 해.
 - 현재 날짜는 {{ current }} 야.
 - 응답은 JSON 형식이며, 지시한 정보 외에는 포함하면 안돼.
 
@@ -28,15 +28,31 @@
 
 # Examples
 
-<user id="example-1">
+<user id="create-example-1">
 25년 6월 25일 오후 3시에 회사 앞 스타벅스에서 만나도록 해요.
 </user>
 
-<assistant id="example-1">
+<assistant id="create-example-1">
 {
-  "date": "2025-06-25",
-  "time": "15:00",
-  "location": "회사 앞 스타벅스"
-  "action": "create"
+    "action": "create",
+    "summary": "제목 없음",
+    "start": "2025-06-25T15:00:00+09:00",
+    "end": "2025-06-25T16:00:00+09:00",
+    "location": "회사 앞 스타벅스"
+}
+</assistant>
+
+<user id="create-example-2">
+내일 저녁 11시에 홍대 앞 4번 출구에 약속이 있어. 약속은 홍대 클럽으로 잡아줘.
+(현재가 2025-05-05T08:12:19+09:00 이라면, 내일은 2025-05-06T08:12:19+09:00로 판단)
+</user>
+
+<assistant id="create-example-2">
+{
+    "action": "create",
+    "summary": "홍대 클럽",
+    "start": "2025-06-05T23:00:00+09:00",
+    "end": "2025-05-07T00:00:00+09:00",
+    "location": "홍대 앞 4번 출구"
 }
 </assistant>

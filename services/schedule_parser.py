@@ -24,7 +24,7 @@ client = OpenAI(api_key=API_KEY)
 def render_template() -> str:
     template = PROMPT_TEMPLATE_ENV.get_template(PROMPT_FILE)
     current = datetime.now().strftime(RFC3339_FORMAT_KOREA)
-    output = template.render(format=FORMAT, current=current)
+    output = template.render(current=current)
     return output
 
 
