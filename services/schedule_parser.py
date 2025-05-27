@@ -10,19 +10,21 @@ load_dotenv()
 
 API_KEY = os.getenv("OPENAI_API_KEY")
 BASE_DIR = Path(__file__).resolve().parents[1]
-EXTRACT_PROMPT_PATH = BASE_DIR / "prompts" / "extract.jinja"
+PROMPT_PATH_DIR = BASE_DIR / "prompts"
+PROMPT_FILE = "extract.jinja"
+FORMAT = "RFC3339"
+RFC3339_FORMAT_KOREA = "%Y-%m-%dT%H:%M:%S-09:00"
+
+PROMPT_TEMPLATE_ENV = Environment(loader=FileSystemLoader(PROMPT_PATH_DIR))
+
 
 client = OpenAI(api_key=API_KEY)
 
 
 def render_template() -> str:
-    env = Environment(
-        loader=FileSystemLoader("../prompts")
-    )  # 이거 매번 생성하기보다는 한번 생성한것을 재활용하는게 좋지 않을까?
-    template = env.get_template("extract.jinja")  # 하드 코딩하지 말고 상수로 대체하자
-
-    current = datetime.now().strftime("%Y-%m-%dT%H:%M:%S-09:00")
-    output = template.render(current=current)
+    template = PROMPT_TEMPLATE_ENV.get_template(PROMPT_FILE)
+    current = datetime.now().strftime(RFC3339_FORMAT_KOREA)
+    output = template.render(format=FORMAT, current=current)
     return output
 
 
@@ -34,6 +36,3 @@ def parse_schedule_from_message(message: str):
     )
 
     return response.output_text
-
-if __name__ == "__main__":
-    print(render_template())
