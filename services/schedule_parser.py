@@ -13,7 +13,9 @@ BASE_DIR = Path(__file__).resolve().parents[1]
 PROMPT_PATH_DIR = BASE_DIR / "prompts"
 PROMPT_FILE = "extract.jinja"
 FORMAT = "RFC3339"
-RFC3339_FORMAT_KOREA = "%Y-%m-%dT%H:%M:%S-09:00"
+UTC_KOREA = "09:00"
+RFC3339_FORMAT = "%Y-%m-%dT%H:%M:%S"
+RFC3339_FORMAT_KOREA = f"{RFC3339_FORMAT}+{UTC_KOREA}"
 
 PROMPT_TEMPLATE_ENV = Environment(loader=FileSystemLoader(PROMPT_PATH_DIR))
 
@@ -24,7 +26,7 @@ client = OpenAI(api_key=API_KEY)
 def render_template() -> str:
     template = PROMPT_TEMPLATE_ENV.get_template(PROMPT_FILE)
     current = datetime.now().strftime(RFC3339_FORMAT_KOREA)
-    output = template.render(current=current)
+    output = template.render(format=RFC3339_FORMAT, country=UTC_KOREA, current=current)
     return output
 
 
